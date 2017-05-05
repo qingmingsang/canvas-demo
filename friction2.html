@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="canvas" width='1000' height="1000">
+    <p>you browser not support canvas!</p>
+</canvas>
+<script src="./utils.js"></script>
+<script src="./spaceShip.js"></script>
+<script>
+
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+
+    var ship = new SpaceShip();
+    ship.x = canvas.width / 2;
+    ship.y = canvas.height / 2;
+
+    var f = 0.97,
+            vr = 0,
+            vx = 0,
+            vy = 0,
+            ax = 0,
+            ay = 0,
+            speed = 0,
+            angle = 0;
+
+    window.addEventListener("keydown", function (event) {
+        switch (event.keyCode) {
+            case 37:
+                vr = -3;
+                break;
+            case 39:
+                vr = 3;
+                break;
+            case 38:
+                speed = 0.5;
+                ship.showFlame = true;
+                break;
+        }
+    }, false);
+
+    window.addEventListener("keyup", function (event) {
+        vr = 0;
+        speed = 0;
+        ship.showFlame = false;
+    }, false);
+
+    (function drawFramw() {
+        window.requestAnimationFrame(drawFramw, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        ship.rotation += vr * Math.PI / 180;
+        angle = ship.rotation;
+
+        ax = Math.cos(angle) * speed;
+        ay = Math.sin(angle) * speed;
+
+        vx += ax;
+        vy += ay;
+
+        //摩擦力
+        //减少计算量
+        if(Math.abs(vx) > 0.001){
+            vx *= f;
+            ship.x += vx
+        }
+        if(Math.abs(vy) > 0.001){
+            vy *= f;
+            ship.y += vy
+        }
+
+//        vx *= f;
+//        vy *= f;
+//
+//        ship.x += vx;
+//        ship.y += vy;
+
+        //边界检测
+        if (ship.x + ship.width / 2 > canvas.width) {
+            ship.x = canvas.width - ship.width/2;
+            vx *= -1;
+        } else if (ship.x < ship.width / 2) {
+            ship.x = ship.width / 2;
+            vx *= -1;
+        }
+        if (ship.y + ship.height / 2 > canvas.height) {
+            ship.y = canvas.height - ship.height / 2;
+            vy *= -1;
+        } else if (ship.y < ship.height / 2) {
+            ship.y = ship.height / 2;
+            vy *= -1;
+        }
+        ship.draw(context);
+    }());
+
+
+</script>
+</body>
+
+</html>

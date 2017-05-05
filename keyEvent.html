@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<p>任意按下按键</p>
+
+<script>
+
+    //定义键盘事件
+    function onKeyboard(event) {
+        switch (event.keyCode) {
+            case 38:
+                console.log('up!');
+                break;
+            case 40:
+                console.log('down!');
+                break;
+            case 37:
+                console.log('left!');
+                break;
+            case 39:
+                console.log('right!');
+                break;
+            default:
+                console.log(event.keyCode);
+        }
+    }
+    //为window对象绑定键盘事件
+    window.addEventListener('keydown', onKeyboard, false)
+
+</script>
+</body>
+
+</html>

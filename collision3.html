@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+
+        p {
+            position: absolute;
+            color: aliceblue;
+            top: 10px;
+            left: 220px;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="canvas" width='500' height="500" style="background:black;">
+    <p>you browser not support canvas!</p>
+</canvas>
+<textarea name="" id="log" cols="30" rows="10"></textarea>
+<script src="./utils.js"></script>
+<script src="./ball.js"></script>
+<script>
+
+    var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            mouse = utils.captureMouse(canvas),
+            ball_1 = new Ball(20, "#49f"),
+            ball_2 = new Ball(20, "#f00");
+
+
+    ball_2.x = canvas.width / 2;
+    ball_2.y = canvas.height / 2;
+
+
+    ball_1.draw(context);
+    ball_2.draw(context);
+
+    canvas.addEventListener('mousemove', function (e) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        ball_1.x = mouse.x;
+        ball_1.y = mouse.y;
+        var dx = ball_2.x - ball_1.x;
+        var dy = ball_2.y - ball_1.y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 40) {
+            log.innerHTML = '碰着了';
+        } else {
+            log.innerHTML = "";
+        }
+        ball_1.draw(context);
+        ball_2.draw(context);
+    }, false);
+
+
+</script>
+</body>
+
+</html>

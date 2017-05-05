@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="canvas" width='500' height="500">
+    <p>you browser not support canvas!</p>
+</canvas>
+<script src="./utils.js"></script>
+<script src="./ball.js"></script>
+<script>
+
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+
+    var ball = new Ball();
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
+
+    var angle = 0,
+            range = 50; //振幅
+
+    (function drawFram() {
+        window.requestAnimationFrame(drawFram, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        ball.x = canvas.width / 2 + Math.sin(angle) * range; //核心
+
+        //控制速度
+        angle += 0.1;
+
+        ball.draw(context);
+    })();
+
+</script>
+</body>
+
+</html>

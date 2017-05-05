@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="canvas" width="500" height="500"></canvas>
+
+<script>
+
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+
+    ctx.save(); // 保存默认的状态
+
+    ctx.fillStyle = "green";
+    ctx.fillRect(10, 10, 100, 100);
+
+    ctx.restore(); // 还原到上次保存的默认状态
+    //让颜色恢复到默认色
+    ctx.fillRect(150, 75, 100, 100);
+
+</script>
+</body>
+
+</html>

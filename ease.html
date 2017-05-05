@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="1000" height="600">
+    your browser not support canvas!
+</canvas>
+
+<script src="./utils.js"></script>
+<script src="./ball.js"></script>
+<script>
+
+    var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d');
+
+    var ball = new Ball(20, "red"),
+            easing = 0.05,  //设置缓动参数
+            targetX = canvas.width / 2; //设定目标位置
+    ball.y = canvas.height / 2;
+
+    (function drawFrame() {
+
+        var stopAni = window.requestAnimationFrame(drawFrame, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        var dx = targetX - ball.x;
+        if (Math.abs(dx) < 1) {
+            ball.x = canvas.width / 2;
+            //停止动画
+            window.cancelAnimationFrame(stopAni);
+        } else {
+            //速度计算
+            //随着ball.x的增大， (targetX - ball.x)的值不断减小， 导致vx不打断减小
+            var vx = dx * easing;
+            ball.x += vx;
+
+        }
+
+        ball.draw(context);
+    }())
+
+</script>
+
+</body>
+</html>

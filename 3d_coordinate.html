@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="canvas" width='650' height="650" style="background:black;">
+    <p>you browser not support canvas!</p>
+</canvas>
+<script src="./utils.js"></script>
+<script src="./ball.js"></script>
+<script>
+
+    var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            ball = new Ball(40, "red"),
+            mouse = utils.captureMouse(canvas);
+    //物体的3D坐标
+    var xpos = 0,
+            ypos = 0,
+            zpos = 0,
+    //距离屏幕的距离（焦距）
+            fl = 250,
+    //消失点
+            vpX = canvas.width / 2,
+            vpY = canvas.height / 2;
+
+    window.addEventListener('keydown', function (e) {
+        if (e.keyCode === 38) {
+            //up  ↑  变小
+            zpos += 5;
+        } else if (e.keyCode === 40) {
+            //down ↓ 变大
+            zpos -= 5;
+        }
+    }, false);
+
+    (function drawFrame() {
+        window.requestAnimationFrame(drawFrame, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        //当物体太大的时，超出canvas画布则不再绘制
+        if (zpos > -fl) {
+            var scale = fl / (fl + zpos); 	  //缩放比列
+            xpos = mouse.x - vpX;
+            ypos = mouse.y - vpY;
+            ball.scaleX = ball.scaleY = scale; //物体大小变化
+            ball.x = vpX + xpos * scale;		  //新坐标
+            ball.y = vpY + ypos * scale;
+            ball.visible = true;				 //物体可见
+        } else {
+            ball.visible = false
+        }
+
+        if (ball.visible) {
+            ball.draw(context);
+        }
+    }())
+
+</script>
+</body>
+
+</html>

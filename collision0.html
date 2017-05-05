@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="canvas" width='500' height="500" style="background:black;">
+    <p>you browser not support canvas!</p>
+</canvas>
+<script src="./utils.js"></script>
+<script src="./box.js"></script>
+<script>
+
+    var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            boxes = [],
+            activeBox = createBox(),
+            gravity = 0.02;
+
+
+    //创建一个新的box
+    function createBox() {
+        var color = Math.random() * (0xffffff);
+        var box = new Box(Math.random() * 40 + 10, Math.random() * 40 + 10, color);
+        box.x = Math.random() * canvas.width;
+        boxes.push(box);
+        return box;
+    }
+
+    //画boxes
+    function drawBox(box) {
+        //判断box是否是activeBox,如果不是做碰撞检测,碰上了，创建新的box
+        if (activeBox !== box && utils.intersects(activeBox, box)) {
+            activeBox.y = box.y - activeBox.height;
+            activeBox = createBox();
+        }
+        box.draw(context);
+    }
+
+    window.addEventListener('keydown', function (event) {
+        switch (event.keyCode) {
+            case 37:
+                activeBox.x -= 5;
+                break;
+            case 39:
+                activeBox.x += 5;
+                break;
+            case 40:
+                gravity = 2;
+                break;
+        }
+    }, false);
+    window.addEventListener("keyup", function (event) {
+        gravity = 0.02;
+    }, false);
+
+
+    (function drawFrame() {
+        var rep = window.requestAnimationFrame(drawFrame, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        activeBox.vy += gravity;
+        activeBox.y += activeBox.vy;
+
+        //如果到达底部就创建一个新的box
+        if (activeBox.y + activeBox.height > canvas.height) {
+            activeBox.y = canvas.height - activeBox.height;
+            activeBox = createBox();
+        }
+        if (activeBox.x < 0) {
+            activeBox.x = 0;
+            //window.cancelAnimationFrame(rep);//无效
+        }
+        if (activeBox.x + activeBox.width > canvas.width) {
+            activeBox.x = canvas.width - activeBox.width;
+        }
+
+        boxes.forEach(drawBox);
+    }());
+
+</script>
+</body>
+
+</html>

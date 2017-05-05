@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+
+        p {
+            position: absolute;
+            color: aliceblue;
+            top: 10px;
+            left: 220px;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="canvas" width='500' height="500" style="background:black;">
+    <p>you browser not support canvas!</p>
+</canvas>
+<p id="log">没撞上</p>
+<script src="./utils.js"></script>
+<script src="./ball.js"></script>
+<script>
+
+    var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            log = document.getElementById('log'),
+            mouse = utils.captureMouse(canvas),
+            ball = new Ball();
+
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
+
+    var ballBounds = ball.getBounds();
+
+    ball.draw(context);
+
+    canvas.addEventListener('mousemove', function (e) {
+        var dx = Math.abs(mouse.x - ball.x);
+        var dy = Math.abs(mouse.y - ball.y);
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        //console.log(distance);
+        if (distance < ball.radius) {
+            log.innerHTML = '撞到了';
+        } else {
+            log.innerHTML = '没撞上';
+        }
+        /*if(utils.containsPoint(ballBounds, mouse.x, mouse.y)){
+         log.value = '碰着了';
+         }else{
+         log.value = '';
+         }*/
+    }, false);
+
+
+</script>
+</body>
+
+</html>

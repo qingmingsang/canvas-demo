@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="1000" height="600">
+    your browser not support canvas!
+</canvas>
+
+<script src="./utils.js"></script>
+<script src="./ball.js"></script>
+<script>
+
+    var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            ball = new Ball();
+
+    ball.x=canvas.width/2;
+    ball.y=canvas.height/2;
+
+    var alpha = 0,
+            targetAlpha = 1,
+            easing = 0.05;
+
+
+    (function drawFrame() {
+        window.requestAnimationFrame(drawFrame, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+
+        //动画循环中
+
+        alpha += (targetAlpha - alpha) * easing;
+        ball.color = "rgba(255, 0, 0," + alpha + ")";
+
+        ball.draw(context);
+    }());
+
+
+</script>
+
+</body>
+</html>

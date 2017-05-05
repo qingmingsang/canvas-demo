@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="myCanvas" width="200" height="100"></canvas>
+<script>
+    var c = document.getElementById("myCanvas");
+    var cxt = c.getContext("2d");
+    cxt.fillStyle = "red";
+    //beginPath() 方法开始一条路径，或重置当前的路径。
+    cxt.beginPath();
+    //context.arc(x,y,r,sAngle,eAngle,counterclockwise);
+    cxt.arc(70, 18, 15, 0, Math.PI * 2, true);
+    cxt.closePath();
+    cxt.fill();
+
+
+</script>
+</body>
+
+</html>

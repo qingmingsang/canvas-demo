@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="canvas" width='500' height="500" style="background:#000">
+    <p>you browser not support canvas!
+    <p>
+</canvas>
+<script src="./utils.js"></script>
+<script>
+    var canvas = document.getElementById('canvas'),
+    //将canvas传入，该方法会返回一个包含属性x和y的对象
+            mouse = utils.captureMouse(canvas);
+
+    //为canvas绑定mousedown事件，当鼠标按下的时候打印出当前鼠标相对于canvas的坐标值
+    canvas.addEventListener('mousedown', function (event) {
+        console.log("x:" + mouse.x + ",y:" + mouse.y);
+    })
+</script>
+</body>
+
+</html>

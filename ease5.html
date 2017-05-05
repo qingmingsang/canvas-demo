@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="1000" height="600">
+    your browser not support canvas!
+</canvas>
+
+<script src="./utils.js"></script>
+<script src="./ball.js"></script>
+<script>
+
+    var red = 255,
+            green = 0,
+            blue = 0,
+            redTarget = 0,
+            greenTarget = 0,
+            blueTarget = 255,
+            easing = 0.2;
+
+    red += (redTarget - red) * easing;
+    green += (greenTarget - green) * easing;
+    blue += (blueTarget - blue) * easing;
+
+    var color = red << 16 | green << 16 | blue;
+    console.log(color)
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="canvas" width="500" height="500"></canvas>
+
+<script>
+    var canvas = document.getElementById('canvas');
+
+    //定义的执行函数add
+    function add(event) {
+        console.log("mouse down");
+    }
+    canvas.addEventListener('mousedown', add, false);
+
+    //移除事件mousedown
+    //canvas.removeEventListener('mousedown', add, false)
+
+</script>
+</body>
+
+</html>

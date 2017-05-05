@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="myCanvas" width="200" height="100"></canvas>
+<script>
+    var c = document.getElementById("myCanvas");
+    var cxt = c.getContext("2d");
+
+    //在画布上绘制 150x75 的矩形，从左上角开始 (0,0)。
+    cxt.fillStyle = "red";
+    //context.fillRect(x,y,width,height)
+    cxt.fillRect(0, 0, 150, 75);
+
+    //cxt.fillStyle = "blue";
+    //cxt.fillRect(50, 50, 150, 75);
+
+</script>
+</body>
+
+</html>

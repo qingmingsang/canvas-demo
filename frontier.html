@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="canvas" width='500' height="500">
+    <p>you browser not support canvas!</p>
+</canvas>
+<p id="log"></p>
+<script src="./utils.js"></script>
+<script src="./ball.js"></script>
+<script>
+
+    var canvas = document.getElementById("canvas"),
+            context = canvas.getContext("2d"),
+            log = document.getElementById("log");
+
+    var balls = [],
+            numBall = 10,
+            canWid = canvas.width,
+            canHei = canvas.height;
+
+    //定义10个小球
+    for (var i = 0; i < numBall; i++) {
+        var size = Math.random() * 20 + 5,   //大小
+                color = Math.random() * (0xffffff),   //颜色
+                ball = new Ball(size, color);
+
+        ball.id = "ball_" + i;   //给每个小球一个id
+        ball.radius = Math.random() * 30 + 10;//半径
+        ball.x = Math.random() * canWid;//位置
+        ball.y = Math.random() * canHei;
+        ball.vx = Math.random() * 2 - 1;//加速度
+        ball.vy = Math.random() * 2 - 1;
+
+        balls.push(ball); //push进数组
+    }
+
+    //定义draw函数
+    function draw(ball, pos) {
+        //让小球加上它的速度值
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+
+        //判断是否超出边界，不论超出哪一边
+        //分别是 右出界，左出界，下出界，上出界
+        if (ball.x - ball.radius > canvas.width ||
+                ball.radius + ball.x < 0 ||
+                ball.y - ball.radius > canvas.height ||
+                ball.y + ball.radius < 0) {
+            //将超出边界的小球从数组中删除
+            balls.splice(pos, 1);
+            if (balls.length > 0) {
+                //将超出的小球的id值输出
+                log.innerHTML += "移除" + ball.id + "<br/>";
+            } else {
+                log.innerHTML = "全部移除";
+            }
+        }
+
+        ball.draw(context);
+    }
+    //动画循环
+    (function drawFrame() {
+        window.requestAnimationFrame(drawFrame, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        //定义初始变量 i 为小球的数量, 并且会随着小球的移除减小
+        var i = balls.length;
+        while (i--) {
+            draw(balls[i], i);
+        }
+    }());
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="myCanvas" width="200" height="100"></canvas>
+<script>
+    var c = document.getElementById("myCanvas");
+    var cxt = c.getContext("2d");
+    cxt.moveTo(20, 20);//起始点
+    cxt.lineTo(150, 50);//画到该点
+    cxt.lineTo(10, 50);//再画到该点
+    cxt.stroke();//执行
+
+
+</script>
+</body>
+
+</html>

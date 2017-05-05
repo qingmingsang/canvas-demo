@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="canvas" width='500' height="500" style="background:black">
+    <p>you browser not support canvas!</p>
+</canvas>
+<script src="./utils.js"></script>
+<script src="./ball.js"></script>
+<script>
+
+    //可能会出现小球跑进大球的问题
+    var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            ball0 = new Ball(80, "#ff0000"),
+            ball1 = new Ball(40),
+            bounce = -1;
+
+    ball0.mass = 2;
+    ball0.x = 100;
+    ball0.y = 100;
+    ball0.vx = Math.random() * 10 - 5;
+    ball0.vy = Math.random() * 10 - 5;
+
+    ball1.mass = 1;
+    ball1.x = 300;
+    ball1.y = 300;
+    ball1.vx = Math.random() * 10 - 5;
+    ball1.vy = Math.random() * 10 - 5;
+
+    //墙体碰撞检测
+    function wallCollsion(ball) {
+        if (ball.x + ball.radius > canvas.width) {
+            ball.x = canvas.width - ball.radius;
+            ball.vx *= bounce;
+        } else if (ball.x < ball.radius) {
+            ball.x = ball.radius;
+            ball.vx *= bounce;
+        }
+
+        if (ball.y + ball.radius > canvas.height) {
+            ball.y = canvas.height - ball.radius;
+            ball.vy *= bounce;
+        } else if (ball.y < ball.radius) {
+            ball.y = ball.radius;
+            ball.vy *= bounce;
+        }
+    }
+
+    //球体碰撞
+
+    function ballCollsion(ball0, ball1) {
+        //第一部分
+        var dx = ball1.x - ball0.x,
+                dy = ball1.y - ball0.y,
+        //用于距离的碰撞检测
+                dist = Math.sqrt(dx * dx + dy * dy);
+
+        //如果发生碰撞
+        if (dist < ball0.radius + ball1.radius) {
+            //计算物体间的夹角，并得出坐标旋转所需要的sin,cos值
+            var angle = Math.atan2(dy, dx),
+                    sin = Math.sin(angle),
+                    cos = Math.cos(angle),
+            //ball0旋转后的坐标
+            //使用ball0作为整个系统旋转的中心点
+                    x0 = 0,
+                    y0 = 0,
+            //ball1旋转后的坐标
+                    //ball1的位置是相对于ball0
+                    x1 = dx * cos + dy * sin,
+                    y1 = dy * cos - dx * sin,
+            //ball0 旋转后的速度
+                    vx0 = ball0.vx * cos + ball0.vy * sin,
+                    vy0 = ball0.vy * cos - ball0.vx * sin,
+            //ball1 旋转后的速度
+                    vx1 = ball1.vx * cos + ball1.vy * sin,
+                    vy1 = ball1.vy * cos - ball1.vx * sin,
+
+
+            //第二部分
+            //因为旋转到水平位置，所以不需要考虑竖直方向的速度
+                    vxTotal = vx0 - vx1;
+            //带入公式计算碰撞后的速度
+            vx0 = ((ball0.mass - ball1.mass) * vx0 + 2 * ball1.mass * vx1) / (ball0.mass + ball1.mass);
+            vx1 = vxTotal + vx0;
+            x0 += vx0;
+            x1 += vx1;
+
+            //第三部分
+            // 位置旋转回去
+            var x0Final = x0 * cos - y0 * sin,
+                    y0Final = y0 * cos + x0 * sin,
+                    x1Final = x1 * cos - y1 * sin,
+                    y1Final = y1 * cos + x1 * sin;
+            //调整球体实际上位于屏幕的位置
+            //相对位置变为绝对位置
+            ball1.x = ball0.x + x1Final;
+            ball1.y = ball0.y + y1Final;
+            ball0.x = ball0.x + x0Final;
+            ball0.y = ball0.y + y0Final;
+            //速度旋转回去
+            ball0.vx = vx0 * cos - vy0 * sin;
+            ball0.vy = vy0 * cos + vx0 * sin;
+            ball1.vx = vx1 * cos - vy1 * sin;
+            ball1.vy = vy1 * cos + vx1 * sin;
+        }
+    }
+
+
+    (function drawFrame() {
+        window.requestAnimationFrame(drawFrame, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        ball0.x += ball0.vx;
+        ball0.y += ball0.vy;
+        ball1.x += ball1.vx;
+        ball1.y += ball1.vy;
+
+        //球体碰撞检测
+        ballCollsion(ball0, ball1);
+        //墙体碰撞检测
+        wallCollsion(ball0);
+        wallCollsion(ball1);
+
+
+        ball0.draw(context);
+        ball1.draw(context);
+    }())
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        html,
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+    </style>
+
+</head>
+
+<body>
+<canvas id="canvas" width='500' height="500">
+    <p>you browser not support canvas!</p>
+</canvas>
+<script src="./utils.js"></script>
+<script src="./ball.js"></script>
+<script>
+
+    var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            mouse = utils.captureMouse(canvas),
+            balls = [],
+            ballsNum = 3,
+            ax = 0,
+            ay = 0,
+            vx = 0,
+            vy = 0,
+            f = 0.99,
+            spring = 0.004, //弹性系数
+            gravity = 0.002;
+
+    for (var i = 0; i < ballsNum; i++) {
+        ball = new Ball(20, Math.random() * (0xffffff));
+        balls.push(ball);
+    }
+
+    function moveBall(ball, targetX, targetY) {
+        var dx = targetX - ball.x;
+        var dy = targetY - ball.y;
+        ax = dx * spring;
+        ay = dy * spring;
+
+        ball.vx += ax;
+        ball.vy += ay;
+        ball.vy += gravity;
+
+        ball.vx *= f;
+        ball.vy *= f;
+
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+    }
+
+    (function drawFrame() {
+        window.requestAnimationFrame(drawFrame, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (var i = 0; i < ballsNum; i++) {
+            moveBall(balls[i], mouse.x, mouse.y);
+            context.beginPath();
+            context.strokeStyle = 'black';
+            context.moveTo(mouse.x, mouse.y);
+            context.lineTo(balls[i].x, balls[i].y);
+            context.stroke();
+            balls[i].draw(context);
+        }
+
+    }())
+
+</script>
+</body>
+
+</html>
