@@ -52,10 +52,10 @@
       <canvas class="myCanvas" width="100" height="100"></canvas>
     </div>
     <script>
-      var canvas = document.querySelector('.myCanvas');
-      var ctx = canvas.getContext('2d');
-      var cw = 100;
-      var ch = 100;
+      var canvas = document.querySelector('.myCanvas');//获取canvas对应dom
+      var ctx = canvas.getContext('2d');//此方法较为基础 , 意为获取canvas绘画2d内容的工具(上下文)
+      var cw = 100;//分辨率 , 其实直接从dom上获取可能更好些
+      var ch = 100; //分辨率 , 其实直接从dom上获取可能更好些
       var percent = 0;
       var points = {
         x1: 100,
@@ -65,11 +65,13 @@
       }
       var speed = 1;
       var aSpeed = 0.1;
-      ctx.moveTo(0, 0);
+      ctx.moveTo(0, 0);//上下文移动到具体位置
       ctx.strokeStyle = 'black';
       ctx.strokeWidth = 1;
-      ctx.save();
+      ctx.save();//保存上下文状态 (比如画笔尺寸 颜色 旋转角度)
       var deg = Math.PI / 180;
+
+      start('show');
 
       function start(type) {
         if (type === 'show') {
@@ -98,14 +100,14 @@
         var disX = Math.floor(points.x2 - points.x1);
         var disY = Math.floor(points.y2 - points.y1);
         if (disY < 0 && type == 'hide') {
-          //				console.log('改展开动画了');
+          //展开动画
           ctx.clearRect(0, 0, cw, ch);
           setTimeout(function () {
             start('show');
           }, 2000)
           return;
         } else if (disY > 50 && type == 'show') {
-          //				console.log('改收起动画了');
+          //收起动画
           setTimeout(function () {
             start('hide');
           }, 2000)
@@ -121,21 +123,21 @@
 
       function drawPageCorShow(points, disX, disY) {
         ctx.save();
-        ctx.beginPath();
+        ctx.beginPath();//开启新的画笔路径
         //闭合三角形
         ctx.moveTo(points.x1, points.y1);
         ctx.lineTo(points.x2, points.y2);
         ctx.lineTo(points.x2, points.y1);
         ctx.lineTo(points.x1, points.y1);
 
-        ctx.closePath();
+        ctx.closePath();//关闭当前画笔路径
         ctx.strokeStyle = "#080";
-        ctx.stroke();
+        ctx.stroke();// 画线动作
 
         ctx.fillStyle = '#ff6600';
-        ctx.fill();
+        ctx.fill();//对闭合区域进行填充
         //重叠模式
-        ctx.globalCompositeOperation = 'source-atop';
+        ctx.globalCompositeOperation = 'source-atop';//画笔的重叠模式
 
         ctx.beginPath();
         ctx.font = '14px Arial';
@@ -145,19 +147,21 @@
         ctx.fillStyle = '#fff';
         ctx.fillText('NEW', 0, 0);
         ctx.closePath();
-        ctx.restore();
+        ctx.restore();//返回上次保存的上下文状态
 
       }
 
       function drawPageCor(points, disX, disY) {
         ctx.save();
         ctx.beginPath();
-        //移動到位置 左上
+        //左上
         ctx.moveTo(points.x1, points.y1);
-        //画第一个曲线
+        //上下文(画笔)按贝塞尔曲线移动(简单理解为可控的曲线即可) 
+        // 画第一个曲线
         ctx.quadraticCurveTo(points.x1 + (disX / 10), points.y1 + disY / 10, (points.x1 + disX / 10), points.y1 + disY / 2);
-        //直线向下
+        //上下文以划线的形式移动到某位置 直线向下
         ctx.lineTo(points.x1 + disX / 10, points.y2 - (disY / 5));
+        //画圆
         //半圆向右
         ctx.arc(points.x1 + disX / 5, points.y2 - (disY / 5), disY / 10, deg * 180, deg * 90, true);
         // 直线向右
@@ -169,6 +173,7 @@
 
         ctx.closePath();
 
+        //创建canvas渐变对象
         var gradient = ctx.createLinearGradient(points.x1, points.y2, points.x1 + (disX / 2), points.y1 + disY / 2);
         gradient.addColorStop(0, '#ccc');
         gradient.addColorStop(0.7, '#111');
@@ -176,13 +181,13 @@
 
         ctx.fillStyle = gradient;
         ctx.fill();
-        ctx.restore();
+        ctx.restore();//返回上次保存的上下文状态
         //更新速度位置
         points.x1 -= speed;
         points.y2 += speed;
         speed += aSpeed;
       }
-      start('show');
+
     </script>
   </body>
 
